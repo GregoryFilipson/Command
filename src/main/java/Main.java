@@ -23,48 +23,61 @@ public class Main {
             System.out.println("Введи команду или 0 для выхода");
             String input = reader.readLine();
             if (input.equals("0")) break;
-            if (input.equals("<<")) {
-                if (curCommand < 0) {
-                    System.out.println("Нечего отменять!");
-                } else {
-                    commands.get(curCommand).unExecute();
-                    curCommand--;
-                }
-            }
-            if (input.equals(">>")) {
-                if (curCommand == commands.size() - 1) {
-                    System.out.println("Нечего вернуть!");
-                    //continue;
-                } else {
-                    curCommand++;
-                    commands.get(curCommand).execute();
-                }
-            }
-            if (input.equals("!!")) {
-                if (curCommand == -1) {
-                    System.out.println("Нечего повторять!");
-                } else {
-                    if (commands.get(curCommand).execute()) {
-                        commands.add(commands.get(curCommand));
-                        curCommand++;
+            switch (input) {
+                case "<<":
+                    if (curCommand < 0) {
+                        System.out.println("Нечего отменять!");
                     } else {
-                        System.out.println("До этого не было прыжка");
+                        commands.get(curCommand).unExecute();
+                        curCommand--;
                     }
-                }
-            } else {
-                if (curCommand != commands.size() - 1) {
-                    for (int i = curCommand + 1; i < commands.size(); i++) {
-                        commands.remove(i);
+                    break;
+                case ">>":
+                    if (curCommand == commands.size() - 1) {
+                        System.out.println("Нечего вернуть!");
+                    } else {
+                        curCommand++;
+                        commands.get(curCommand).execute();
                     }
-                } else {
-                    FrogCommand cmd = FrogCommands.jumpCommand(frog, Integer.parseInt(input));
-                    curCommand++;
-                    commands.add(cmd);
-                    cmd.execute();
-                }
+                    break;
+                case "!!":
+                    if (curCommand == -1) {
+                        System.out.println("Нечего повторять!");
+                    } else {
+                        if (commands.get(curCommand).execute()) {
+                            commands.add(commands.get(curCommand));
+                            curCommand++;
+                        } else {
+                            System.out.println("До этого не было прыжка");
+                        }
+                    }
+                    break;
+                default:
+                    if (curCommand != commands.size() - 1) {
+                        for (int i = curCommand + 1; i < commands.size(); i++) {
+                            commands.remove(i);
+                        }
+                    } else {
+                        FrogCommand cmd = FrogCommands.jumpCommand(frog, Integer.parseInt(input));
+                        curCommand++;
+                        commands.add(cmd);
+                        cmd.execute();
+                    }
+                    break;
             }
             System.out.println(frog);
         }
-        System.out.println(commands);
+        printField(frog.getPosition());
+    }
+
+    public static void printField(int currentPosition) {
+        for (int i = Frog.MIN_POSITION; i <= Frog.MAX_POSITION; i++) {
+            if (i == currentPosition) {
+                System.out.print('X');
+            } else {
+                System.out.print('-');
+            }
+        }
+        System.out.println();
     }
 }

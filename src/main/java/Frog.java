@@ -3,7 +3,7 @@ public class Frog {
     public static final int MIN_POSITION = 0;
     public static final int MAX_POSITION = 10;
 
-    protected int position;
+    private int position;
 
     public Frog() {
         position = 5;
@@ -24,5 +24,9 @@ public class Frog {
     @Override
     public String toString() {
         return "Лягушка на позиции " + position;
+    }
+
+    public int getPosition() {
+        return position;
     }
 }
