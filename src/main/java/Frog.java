@@ -16,8 +16,9 @@ public class Frog {
             System.out.println("Из ведра не выпрыгнешь!");
             position = startPosition;
             return false;
+        } else {
+            return true;
         }
-        else return true;
     }
 
     @Override

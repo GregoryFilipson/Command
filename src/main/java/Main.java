@@ -16,7 +16,7 @@ public class Main {
                 ">> - Redo (повтори отменённую команду)\n" +
                 "!! - повтори последнюю команду\n" +
                 "0 - выход");
-        List<FrogCommands> commands = new ArrayList<>();
+        List<FrogCommand> commands = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int curCommand = -1;
         while (true) {
@@ -30,18 +30,34 @@ public class Main {
                     commands.get(curCommand).unExecute();
                     curCommand--;
                 }
-            } else if (input.equals(">>")) {
+            }
+            if (input.equals(">>")) {
                 if (curCommand == commands.size() - 1) {
-                    System.out.println("Нечего отменять!");
+                    System.out.println("Нечего вернуть!");
+                    //continue;
                 } else {
                     curCommand++;
                     commands.get(curCommand).execute();
                 }
-            } else { //пользователь ввёл новое движение для лягушки
-                if (curCommand != commands.size() - 1) {
-                    //удаляем все команды которые были отменены
+            }
+            if (input.equals("!!")) {
+                if (curCommand == -1) {
+                    System.out.println("Нечего повторять!");
                 } else {
-                    FrogCommands cmd = new FrogCommands(frog, Integer.parseInt(input));
+                    if (commands.get(curCommand).execute()) {
+                        commands.add(commands.get(curCommand));
+                        curCommand++;
+                    } else {
+                        System.out.println("До этого не было прыжка");
+                    }
+                }
+            } else {
+                if (curCommand != commands.size() - 1) {
+                    for (int i = curCommand + 1; i < commands.size(); i++) {
+                        commands.remove(i);
+                    }
+                } else {
+                    FrogCommand cmd = FrogCommands.jumpCommand(frog, Integer.parseInt(input));
                     curCommand++;
                     commands.add(cmd);
                     cmd.execute();
